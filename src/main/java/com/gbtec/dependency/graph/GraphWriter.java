@@ -9,5 +9,5 @@ public interface GraphWriter {
      * @param dependencies
      *            {@link List} of {@link Dependency}s to write.
      */
-    void write(List<Dependency> dependencies);
+    void createRelatedNodes(List<Dependency> dependencies);
 }

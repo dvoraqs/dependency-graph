@@ -60,7 +60,7 @@ public class DependencyGraphTest {
     public void oneDependencyMustBeAddedAsTwoNodes() throws Exception {
         dependencies.add(new Dependency("1", "2"));
 
-        w.write(dependencies);
+        w.createRelatedNodes(dependencies);
 
         assertThat(countNodes(), equalTo(2));
     }
@@ -70,7 +70,7 @@ public class DependencyGraphTest {
         dependencies.add(new Dependency("1", "2"));
         dependencies.add(new Dependency("1", "3"));
 
-        w.write(dependencies);
+        w.createRelatedNodes(dependencies);
 
         assertThat(countNodes(), equalTo(3));
     }
@@ -79,7 +79,7 @@ public class DependencyGraphTest {
     public void nodesMustHaveReleationship() throws Exception {
         dependencies.add(new Dependency("1", "2"));
         
-        w.write(dependencies);
+        w.createRelatedNodes(dependencies);
 
         ResourceIterable<Node> nodes = graphDb.findNodesByLabelAndProperty(
                Neo4JWriter.Label, "name", "1");
