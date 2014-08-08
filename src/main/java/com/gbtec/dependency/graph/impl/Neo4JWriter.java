@@ -1,4 +1,4 @@
-package com.gbtec.dependency.graph;
+package com.gbtec.dependency.graph.impl;
 
 import java.util.List;
 
@@ -10,6 +10,9 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.ResourceIterable;
 import org.neo4j.graphdb.Transaction;
+
+import com.gbtec.dependency.graph.Dependency;
+import com.gbtec.dependency.graph.GraphWriter;
 
 public class Neo4JWriter implements GraphWriter {
 
@@ -26,12 +29,12 @@ public class Neo4JWriter implements GraphWriter {
      * @see com.gbtec.dependency.graph.GraphWriter#write(java.util.List)
      */
     @Override
-    public void write(List<Dependency> dependencies) {
+    public void createRelatedNodes(List<Dependency> dependencies) {
         Transaction tx = graphDb.beginTx();
 
         for (Dependency d : dependencies) {
-            Node from = createNodeIfNotExists(d.from());
-            Node to = createNodeIfNotExists(d.to());
+            Node from = findOrCreateNode(d.from());
+            Node to = findOrCreateNode(d.to());
 
             createRelationShip(from, to);
         }
@@ -39,6 +42,7 @@ public class Neo4JWriter implements GraphWriter {
     }
 
     /**
+     * 
      * Creates a node if it does not yet exist. If a node with the given name
      * already exists in database, no new node will created.
      * 
@@ -46,7 +50,7 @@ public class Neo4JWriter implements GraphWriter {
      *            The name of the node to create
      * @return A node object with the given name.
      */
-    private Node createNodeIfNotExists(String nodeName) {
+    private Node findOrCreateNode(String nodeName) {
         ResourceIterable<Node> nodes = findNodeByName(nodeName);
         Node node;
         if (nodes.iterator().hasNext()) {
