@@ -32,8 +32,12 @@ public class Neo4JWriter implements GraphWriter {
      */
     @Override
     public void createRelatedNodes(List<Dependency> dependencies) {
+<<<<<<< HEAD:src/main/java/com/gbtec/dependency/graph/impl/Neo4JWriter.java
     	
     	Transaction tx = graphDb.beginTx();
+=======
+        Transaction tx = graphDb.beginTx();
+>>>>>>> ab6451adb4ef9f4f2da13dd41290d3517e1ec8d8:src/main/java/com/gbtec/dependency/graph/Neo4JWriter.java
 
         for (Dependency d : dependencies) {
             Node from = findOrCreateNode(d.from());
