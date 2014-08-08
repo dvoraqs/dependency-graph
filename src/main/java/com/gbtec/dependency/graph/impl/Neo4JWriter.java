@@ -10,6 +10,8 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.ResourceIterable;
 import org.neo4j.graphdb.Transaction;
+import org.neo4j.helpers.collection.Iterables;
+import org.neo4j.tooling.GlobalGraphOperations;
 
 import com.gbtec.dependency.graph.Dependency;
 import com.gbtec.dependency.graph.GraphWriter;
@@ -18,7 +20,7 @@ public class Neo4JWriter implements GraphWriter {
 
     private GraphDatabaseService graphDb = null;
 
-    static Label Label = DynamicLabel.label("Label_Name");
+    static Label Label = DynamicLabel.label("maven-artifact");
 
     public Neo4JWriter(GraphDatabaseService graphDb) {
         this.graphDb = graphDb;
@@ -30,15 +32,30 @@ public class Neo4JWriter implements GraphWriter {
      */
     @Override
     public void createRelatedNodes(List<Dependency> dependencies) {
-        Transaction tx = graphDb.beginTx();
+    	
+    	Transaction tx = graphDb.beginTx();
 
         for (Dependency d : dependencies) {
             Node from = findOrCreateNode(d.from());
             Node to = findOrCreateNode(d.to());
 
             createRelationShip(from, to);
+            System.out.println("write: " + from + " " + to);
         }
+        
         tx.success();
+        
+        Iterable<Node> allNodes = GlobalGraphOperations.at(graphDb)
+				.getAllNodes();
+
+		Iterable<Relationship> allRelationships = GlobalGraphOperations.at(
+				graphDb).getAllRelationships();
+
+		System.out.println(String.format(
+				"'%s' Items  related by '%s' relationships. Shutting down...",
+				Iterables.count(allNodes), Iterables.count(allRelationships)));
+		
+		tx.close();
     }
 
     /**
