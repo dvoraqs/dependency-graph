@@ -2,6 +2,9 @@ package com.gbtec.dependency.graph.impl;
 
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import org.neo4j.graphdb.DynamicLabel;
 import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.GraphDatabaseService;
@@ -18,7 +21,9 @@ import com.gbtec.dependency.graph.GraphWriter;
 
 public class Neo4JWriter implements GraphWriter {
 
-    private GraphDatabaseService graphDb = null;
+	private static final Logger LOG = LogManager.getLogger();
+    
+	private GraphDatabaseService graphDb = null;
 
     static Label Label = DynamicLabel.label("maven-artifact");
 
@@ -45,18 +50,11 @@ public class Neo4JWriter implements GraphWriter {
         
         tx.success();
         
-        Iterable<Node> allNodes = GlobalGraphOperations.at(graphDb)
-				.getAllNodes();
-
-		Iterable<Relationship> allRelationships = GlobalGraphOperations.at(
-				graphDb).getAllRelationships();
-
-		System.out.println(String.format(
-				"'%s' Items  related by '%s' relationships. Shutting down...",
-				Iterables.count(allNodes), Iterables.count(allRelationships)));
+        log();
 		
 		tx.close();
     }
+
 
     /**
      * 
@@ -116,4 +114,17 @@ public class Neo4JWriter implements GraphWriter {
         return from.createRelationshipTo(to,
                 DynamicRelationshipType.withName("dependsOn"));
     }
+    
+	private void log() {
+		if (LOG.isDebugEnabled()) {
+        	Iterable<Node> allNodes = GlobalGraphOperations.at(graphDb)
+        			.getAllNodes();
+        	
+        	Iterable<Relationship> allRelationships = GlobalGraphOperations.at(
+        			graphDb).getAllRelationships();
+        	LOG.debug(String.format(
+        			"'%s' Items  related by '%s' relationships. Shutting down...",
+        			Iterables.count(allNodes), Iterables.count(allRelationships)));
+		}
+	}
 }
