@@ -45,7 +45,6 @@ public class Neo4JWriter implements GraphWriter {
             Node to = findOrCreateNode(d.to());
 
             createRelationShip(from, to);
-            System.out.println("write: " + from + " " + to);
         }
         
         tx.success();
