@@ -43,7 +43,6 @@ public class Neo4JWriter implements GraphWriter {
             System.out.println("write: " + from + " " + to);
         }
         
-        tx.success();
         
         Iterable<Node> allNodes = GlobalGraphOperations.at(graphDb)
 				.getAllNodes();
@@ -55,6 +54,7 @@ public class Neo4JWriter implements GraphWriter {
 				"'%s' Items  related by '%s' relationships. Shutting down...",
 				Iterables.count(allNodes), Iterables.count(allRelationships)));
 		
+		tx.success();
 		tx.close();
     }
 

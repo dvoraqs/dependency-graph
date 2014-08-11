@@ -20,7 +20,7 @@ public class DependencyGraph {
 
 	public static void main(String[] args) {
 
-		String DB_PATH = "C:/Users/j.sprenger/Documents/Neo4j/default.graphdb";
+		String DB_PATH = "/Users/stephan/Downloads/neo4j-community-2.1.3/data/graph.db";
 		
 		deleteFileOrDirectory(new File(DB_PATH));
 
