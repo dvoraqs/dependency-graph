@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.factory.GraphDatabaseFactory;
 
@@ -15,7 +17,10 @@ public class DependencyGraph {
 
 	public static void main(String[] args) {
 
-		String DB_PATH = "/Users/stephan/Downloads/neo4j-community-2.1.3/data/graph.db";
+		Logger LOG = LogManager.getLogger();
+		
+		String USER_HOME = System.getProperty("user.home");
+		String DB_PATH = USER_HOME + "/Documents/Neo4j/default.graphdb";
 		
 		deleteFileOrDirectory(new File(DB_PATH));
 
@@ -34,11 +39,11 @@ public class DependencyGraph {
 			writer.createRelatedNodes(parser.parse(lines));
 
 		} catch (IOException e) {
-			System.out.println(e);
+			LOG.error(e);
 		}
 
 		graphDb.shutdown();
-		System.out.println("Shout down finished");
+		LOG.info("Shout down finished");
 	}
 
 	private static void registerShutdownHook(final GraphDatabaseService graphDb) {
