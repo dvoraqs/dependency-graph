@@ -8,12 +8,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.neo4j.graphdb.GraphDatabaseService;
-import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.Transaction;
 import org.neo4j.graphdb.factory.GraphDatabaseFactory;
-import org.neo4j.helpers.collection.Iterables;
-import org.neo4j.tooling.GlobalGraphOperations;
 
 import com.gbtec.dependency.graph.impl.Neo4JWriter;
 import com.gbtec.dependency.parser.Parser;
@@ -24,7 +19,8 @@ public class DependencyGraph {
 
 		Logger LOG = LogManager.getLogger();
 		
-		String DB_PATH = "C:/Users/j.sprenger/Documents/Neo4j/default.graphdb";
+		String USER_HOME = System.getProperty("user.home");
+		String DB_PATH = USER_HOME + "/Documents/Neo4j/default.graphdb";
 		
 		deleteFileOrDirectory(new File(DB_PATH));
 

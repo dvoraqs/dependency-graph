@@ -47,10 +47,10 @@ public class Neo4JWriter implements GraphWriter {
             createRelationShip(from, to);
         }
         
-        tx.success();
         
         log();
 		
+		tx.success();
 		tx.close();
     }
 

@@ -23,7 +23,6 @@ import org.neo4j.tooling.GlobalGraphOperations;
 
 import com.gbtec.dependency.graph.Dependency;
 import com.gbtec.dependency.graph.GraphWriter;
-import com.gbtec.dependency.graph.impl.Neo4JWriter;
 
 public class DependencyGraphTest {
 
