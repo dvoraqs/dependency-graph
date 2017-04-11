@@ -16,24 +16,30 @@ import com.gbtec.dependency.parser.Parser;
 public class DependencyGraph {
 
 	public static void main(String[] args) {
+		String userHome = System.getProperty("user.home");
+		String defaultDbPath = userHome + "/Documents/Neo4j/default.graphdb";
+		String defaultInputPath = "src/main/resources/tree.dot.txt";
+		
+		String inputPath = args.length > 0 ? args[0] : defaultInputPath;
+		String dbPath = args.length > 1 ? args[1] : defaultDbPath;
 
+		writeGraph(inputPath, dbPath);
+	}
+
+	private static void writeGraph(String inputPath, String dbPath) {
 		Logger LOG = LogManager.getLogger();
 		
-		String USER_HOME = System.getProperty("user.home");
-		String DB_PATH = USER_HOME + "/Documents/Neo4j/default.graphdb";
-		
-		deleteFileOrDirectory(new File(DB_PATH));
+		deleteFileOrDirectory(new File(dbPath));
 
 		GraphDatabaseService graphDb = new GraphDatabaseFactory()
-				.newEmbeddedDatabase(DB_PATH);
+				.newEmbeddedDatabase(dbPath);
 		
 		registerShutdownHook(graphDb);
 
 		try {
 			Parser parser = new Parser();
 
-			List<String> lines = FileUtils.readLines(new File(
-					"src/main/resources/tree.dot.txt"));
+			List<String> lines = FileUtils.readLines(new File(inputPath));
 
 			GraphWriter writer = new Neo4JWriter(graphDb);
 			writer.createRelatedNodes(parser.parse(lines));
