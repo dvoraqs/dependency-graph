@@ -43,7 +43,7 @@ public class DependencyGraph {
 		}
 
 		graphDb.shutdown();
-		LOG.info("Shout down finished");
+		LOG.info("Shut down finished");
 	}
 
 	private static void registerShutdownHook(final GraphDatabaseService graphDb) {
